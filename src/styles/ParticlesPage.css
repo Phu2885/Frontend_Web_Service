@@ -1,0 +1,137 @@
+/* Стили для страницы частиц */
+.particles-page {
+    background: url('/assets/images/background.png') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.search-container {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    z-index: 10;
+}
+
+.search-container form {
+    display: flex;
+    align-items: center;
+}
+
+.search-container input[type="text"] {
+    padding: 5px;
+    font-size: 16px;
+    width: 300px; /* Увеличил ширину поля */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-container button {
+    padding: 5px 10px;
+    font-size: 16px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.search-container button:hover {
+    background-color: #555;
+}
+
+.catalog-title {
+    color: #ffffff;
+    font-size: 40px;
+    text-align: center;
+    margin: 50px 0 10px;
+    font-weight: bold;
+}
+
+.catalog-subtitle {
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Стили для Bootstrap карточек */
+.particles-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.particle-card {
+    border-radius: 15px !important;
+    border: 1px solid #ccc !important;
+}
+
+/* Гарантируем одинаковую высоту карточек */
+.particle-card .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.calculator-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.calculator-icon img {
+    width: 60px;
+    height: 60px;
+}
+
+.cart-notification {
+    position: absolute;
+    top: -1px;
+    right: 3px;
+    background-color: #ff4444;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .search-container {
+        position: static;
+        margin: 10px 20px;
+    }
+    
+    .search-container input[type="text"] {
+        width: 100%;
+    }
+    
+    .catalog-title {
+        font-size: 32px;
+        margin: 20px 0 10px;
+    }
+    
+    .catalog-subtitle {
+        font-size: 16px;
+    }
+    
+    .particles-grid {
+        padding: 10px;
+    }
+    
+    .particle-card {
+        width: 100% !important;
+        max-width: 309px;
+    }
+}

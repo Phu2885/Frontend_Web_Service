@@ -1,0 +1,204 @@
+/* Стили для страницы деталей частицы */
+.detail-container {
+    background: url('/assets/images/background1.png') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.particle-details {
+    background: #fff;
+    border-radius: 8px;
+    padding: 30px;
+    margin: 20px auto;
+    max-width: 1000px;
+    border: 1px solid #ddd;
+    position: relative;
+    z-index: 1;
+}
+
+.breadcrumbs-container {
+    position: absolute;
+    top: 15px;
+    left: 20px; /* Меняем right на left */
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили для Breadcrumbs внутри карточки */
+.breadcrumbs-container .breadcrumbs {
+    background: transparent;
+    border-bottom: none;
+    padding: 0;
+    backdrop-filter: none;
+}
+
+.breadcrumbs-container .breadcrumbs .container {
+    font-size: 14px;
+    gap: 6px;
+}
+
+.breadcrumbs-container .breadcrumb-home {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.breadcrumbs-container .breadcrumb-link {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.breadcrumbs-container .breadcrumb-current {
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.breadcrumbs-container .breadcrumb-separator {
+    color: #7f8c8d;
+}
+
+.particle-details h2 {
+    color: #000;
+    font-size: 28px;
+    margin: 0 0 25px 0;
+    text-align: center;
+    font-weight: bold;
+    padding-top: 30px; /* Добавляем отступ сверху для breadcrumbs */
+}
+
+.details-content {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.info {
+    flex: 1;
+}
+
+.info h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 20px 0 10px 0;
+}
+
+.details-list {
+    list-style: disc;
+    padding-left: 20px;
+    margin: 0;
+    background: #e6e6e6;
+    padding: 15px 25px;
+    border-radius: 4px;
+}
+
+.details-list li {
+    margin: 8px 0;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.particle-image {
+    flex: 0 0 300px;
+    text-align: center;
+}
+
+.particle-image img {
+    width: 250px;
+    height: 250px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.add-to-calculation-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.add-to-calculation-btn:hover {
+    background-color: #45a049;
+}
+
+@media (max-width: 768px) {
+    .detail-container {
+        padding: 10px;
+    }
+    
+    .breadcrumbs-container {
+        position: static;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    
+    .details-content {
+        flex-direction: column;
+    }
+    
+    .particle-image {
+        order: -1;
+        flex: 0 0 auto;
+        margin-bottom: 20px;
+    }
+    
+    .particle-image img {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .particle-details {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    .info h3 {
+        font-size: 16px;
+    }
+    
+    .details-list li {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .particle-details {
+        padding: 15px;
+    }
+    
+    .details-content {
+        gap: 20px;
+    }
+    
+    .particle-image img {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .particle-details h2 {
+        font-size: 24px;
+    }
+    
+    .add-to-calculation-btn {
+        font-size: 14px;
+        padding: 10px;
+    }
+    
+    .breadcrumbs-container .breadcrumbs .container {
+        font-size: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
