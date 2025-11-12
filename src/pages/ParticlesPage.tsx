@@ -1,63 +1,34 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { Particle } from '../types'
-import { fetchParticles, addToCalculation, fetchCalculation } from '../api/particlesApi'
+import { fetchParticles } from '../api/particlesApi' // УБИРАЕМ addToCalculation, fetchCalculation
 import Navbar from '../components/Navbar'
 import ParticleCard from '../components/ParticleCard'
+import ParticleFilters from '../components/ParticleFilters'
+import { useAppSelector } from '../hooks/redux'
 import '../styles/ParticlesPage.css'
 
 const ParticlesPage = () => {
+  const filters = useAppSelector((state) => state.filters)
   const [particles, setParticles] = useState<Particle[]>([])
-  const [filteredParticles, setFilteredParticles] = useState<Particle[]>([])
-  const [searchTerm, setSearchTerm] = useState('')
   const [loading, setLoading] = useState(true)
-  const [calculation, setCalculation] = useState({ count: 0, total: 0 })
 
+  // Загружаем частицы ТОЛЬКО при изменении appliedTitle (после нажатия "Найти")
   useEffect(() => {
     loadParticles()
-    loadCalculation()
-  }, [])
-
-  useEffect(() => {
-    setFilteredParticles(particles)
-  }, [particles])
+  }, [filters.appliedTitle])
 
   const loadParticles = async () => {
     try {
       setLoading(true)
-      const data = await fetchParticles({ title: searchTerm })
+      // Если appliedTitle пустой - получаем ВСЕ частицы
+      // Если есть appliedTitle - фильтруем
+      const apiFilters = filters.appliedTitle ? { title: filters.appliedTitle } : {}
+      const data = await fetchParticles(apiFilters)
       setParticles(data)
-      setFilteredParticles(data)
     } catch (err) {
       console.error('Error loading particles:', err)
     } finally {
       setLoading(false)
-    }
-  }
-
-  const loadCalculation = async () => {
-    try {
-      const data = await fetchCalculation()
-      setCalculation(data)
-    } catch (err) {
-      console.error('Error loading calculation:', err)
-    }
-  }
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    loadParticles()
-  }
-
-  const handleAddToCalculation = async (particleId: number) => {
-    try {
-      await addToCalculation(particleId)
-      // Обновляем корзину после добавления
-      await loadCalculation()
-      alert('Частица добавлена в заявку на расчет')
-    } catch (err) {
-      alert('Ошибка при добавлении в заявку')
-      console.error('Error adding to calculation:', err)
     }
   }
 
@@ -76,48 +47,53 @@ const ParticlesPage = () => {
     <div className="particles-page">
       <Navbar />
       
-      <div className="search-container">
-        <form onSubmit={handleSearch}>
-          <input 
-            type="text" 
-            name="particleSearch" 
-            placeholder="Поиск по названию или семейству..." 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ width: '400px', padding: '8px' }}
-          />
-          <button type="submit">Найти</button>
-        </form>
-      </div>
+      <ParticleFilters />
 
       <h2 className="catalog-title">Каталог частиц</h2>
       <p className="catalog-subtitle">
         Исследуйте отклонение заряженных частиц в магнитном поле пузырьковой камеры
       </p>
 
-      {filteredParticles.length === 0 && !loading && searchTerm && (
+      {/* Показываем результаты поиска ТОЛЬКО если был применен поиск */}
+      {filters.appliedTitle && (
+        <div className="search-results-info">
+          Результаты поиска по: "{filters.appliedTitle}"
+          {particles.length > 0 && ` (найдено: ${particles.length})`}
+        </div>
+      )}
+
+      {particles.length === 0 && !loading && (
         <div style={{color: 'white', textAlign: 'center', padding: '20px'}}>
-          Частицы не найдены. Попробуйте изменить параметры поиска.
+          {filters.appliedTitle 
+            ? "Частицы не найдены. Попробуйте изменить параметры поиска."
+            : "Выберите частицы для отображения."
+          }
         </div>
       )}
 
       <div className="particles-grid">
-        {filteredParticles.map(particle => (
+        {particles.map(particle => (
           <ParticleCard 
             key={particle.id}
             particle={particle} 
-            onAddToCalculation={handleAddToCalculation}
+            // УБИРАЕМ onAddToCalculation
           />
         ))}
       </div>
 
-      <Link to="/calculations" className="calculator-icon">
-        <img src="/assets/images/calculator.png" alt="Калькулятор" />
-        {/* Показываем счетчик только если count > 0 */}
-        {calculation.count > 0 && (
-          <span className="cart-notification">{calculation.count}</span>
-        )}
-      </Link>
+      {/* ОСТАВЛЯЕМ calculator-icon для перехода к расчетам */}
+    <div className="calculator-icon">
+      <img 
+        src="/assets/icons/calculator.png" 
+        alt="Calculator"
+        onClick={() => alert('Калькулятор для расчетов траекторий частиц будет реализован для авторизованных пользователей')}
+        style={{ 
+          cursor: 'pointer',
+          opacity: 0.6 // Полупрозрачный как у друга
+        }}
+        title="Калькулятор траекторий (в разработке)"
+      />
+    </div>
     </div>
   )
 }

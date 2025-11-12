@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Particle } from '../types'
-import { fetchParticleById, addToCalculation } from '../api/particlesApi'
+import { fetchParticleById } from '../api/particlesApi' // УБРАЛИ addToCalculation
 import Navbar from '../components/Navbar'
 import Breadcrumbs from '../components/Breadcrumbs'
 import '../styles/ParticleDetailPage.css'
@@ -29,17 +29,7 @@ const ParticleDetailPage = () => {
     }
   }
 
-  const handleAddToCalculation = async () => {
-    if (!particle) return
-    
-    try {
-      await addToCalculation(particle.id)
-      alert('Частица добавлена в заявку на расчет')
-    } catch (err) {
-      alert('Ошибка при добавлении в заявку')
-      console.error('Error adding to calculation:', err)
-    }
-  }
+  // УБРАЛИ функцию handleAddToCalculation
 
   if (loading) {
     return (
@@ -64,8 +54,8 @@ const ParticleDetailPage = () => {
   }
 
   const imageUrl = particle.image 
-    ? `/assets/images/${particle.image}`
-    : '/assets/images/default-particle.png'
+    ? `${import.meta.env.BASE_URL || ''}assets/images/${particle.image}`
+    : `${import.meta.env.BASE_URL || ''}assets/images/default-particle.png`
 
   return (
     <div className="detail-container">
@@ -99,12 +89,7 @@ const ParticleDetailPage = () => {
               <li>Кварковый состав: {particle.composition}</li>
             </ul>
 
-            <button 
-              className="add-to-calculation-btn"
-              onClick={handleAddToCalculation}
-            >
-              Добавить в расчет энергии
-            </button>
+            {/* УБРАЛИ кнопку "Добавить в расчет энергии" */}
           </div>
 
           <div className="particle-image">

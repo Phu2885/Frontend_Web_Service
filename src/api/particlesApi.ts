@@ -1,4 +1,5 @@
-import { Particle, Calculation, Filters } from '../types'
+import { Particle, Filters } from '../types'
+import { dest_api, dest_img } from '../config/environment'
 
 // Mock данные для частиц
 const MOCK_PARTICLES: Particle[] = [
@@ -52,14 +53,6 @@ const MOCK_PARTICLES: Particle[] = [
   }
 ]
 
-// Значения для неавторизованного пользователя (как возвращает бекенд)
-const UNAUTHORIZED_CALCULATION: Calculation = {
-  count: 0,
-  total: -1
-}
-
-const API_BASE = '/api'
-
 // Функция для преобразования данных с бекенда
 const transformParticleFromBackend = (backendParticle: any): Particle => {
   return {
@@ -76,19 +69,23 @@ const transformParticleFromBackend = (backendParticle: any): Particle => {
   }
 }
 
-// Функция для получения URL изображения
+
+// Универсальная функция для всех окружений
 export const getImageUrl = (imageName: string | undefined): string => {
-  if (!imageName) return '/assets/images/default-particle.png'
+  if (!imageName) {
+    return `${import.meta.env.BASE_URL || ''}assets/images/default-particle.png`
+  }
   
-  try {
-    // Пытаемся использовать минио (бекенд)
-    return `http://127.0.0.1:9000/img/${imageName}`
-  } catch {
-    // Если бекенд недоступен, используем локальные assets
-    return `/assets/images/${imageName}`
+  const isTauri = typeof window !== 'undefined' && (window as any).__TAURI__ !== undefined
+  
+  if (isTauri) {
+    return `${dest_img}/${imageName}`
+  } else {
+    // Для GitHub Pages используем правильный путь
+    return `${import.meta.env.BASE_URL || ''}assets/images/${imageName}`
   }
 }
-
+// 
 // Получение списка частиц с фильтрацией
 export const fetchParticles = async (filters: Filters = {}): Promise<Particle[]> => {
   try {
@@ -97,7 +94,8 @@ export const fetchParticles = async (filters: Filters = {}): Promise<Particle[]>
       if (value) params.append(key, value)
     })
 
-    const response = await fetch(`${API_BASE}/particles?${params}`)
+    // Используем dest_api из environment.ts
+    const response = await fetch(`${dest_api}/particles?${params}`)
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
@@ -134,7 +132,8 @@ export const fetchParticles = async (filters: Filters = {}): Promise<Particle[]>
 // Получение деталей частицы по ID
 export const fetchParticleById = async (id: number): Promise<Particle> => {
   try {
-    const response = await fetch(`${API_BASE}/particles/${id}`)
+    // Используем dest_api из environment.ts
+    const response = await fetch(`${dest_api}/particles/${id}`)
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
@@ -161,59 +160,7 @@ export const fetchParticleById = async (id: number): Promise<Particle> => {
   }
 }
 
-// Добавление частицы в расчет
-export const addToCalculation = async (particleId: number): Promise<void> => {
-  try {
-    const response = await fetch(`${API_BASE}/calculations`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ particleId, quantity: 1 }),
-    })
-    
-    if (!response.ok) {
-      // Если 401 Unauthorized - пользователь не авторизован
-      if (response.status === 401) {
-        console.warn('Пользователь не авторизован, нельзя добавить в расчет')
-        return
-      }
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-  } catch (error) {
-    console.warn('Не удалось добавить в расчет')
-  }
-}
-
-// Получение данных корзины
-export const fetchCalculation = async (): Promise<Calculation> => {
-  try {
-    const response = await fetch(`${API_BASE}/calculations`)
-    
-    if (!response.ok) {
-      // Если 401 Unauthorized - пользователь не авторизован
-      if (response.status === 401) {
-        console.warn('Пользователь не авторизован, возвращаем значения для гостя')
-        return UNAUTHORIZED_CALCULATION
-      }
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-    
-    const data = await response.json()
-    
-    // Если бекенд вернул данные, используем их
-    // Проверяем разные возможные форматы ответа
-    if (data.count !== undefined && data.total !== undefined) {
-      return data
-    } else if (data.data && data.data.count !== undefined && data.data.total !== undefined) {
-      return data.data
-    }
-    
-    // Если формат непонятный, возвращаем значения для неавторизованного
-    return UNAUTHORIZED_CALCULATION
-    
-  } catch (error) {
-    console.warn('API недоступен, возвращаем значения для неавторизованного пользователя')
-    return UNAUTHORIZED_CALCULATION
-  }
+export const getCalculationBadge = async (): Promise<{count: number}> => {
+  // Всегда возвращаем пустую корзину для гостя
+  return { count: 0 };
 }

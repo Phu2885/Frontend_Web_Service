@@ -1,3 +1,4 @@
+// src/types.ts
 export interface Particle {
   id: number
   title: string
@@ -11,15 +12,16 @@ export interface Particle {
   description?: string
 }
 
-// УБИРАЕМ items полностью, так как оно не используется
 export interface Calculation {
   count: number
   total: number
 }
 
 export interface Filters {
-  title?: string
-  mass?: string
-  charge?: string
-  family?: string
+  title?: string // параметр для API
+}
+
+export interface FiltersState {
+  searchInput: string
+  appliedTitle: string
 }

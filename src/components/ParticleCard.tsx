@@ -5,10 +5,11 @@ import { getImageUrl } from '../api/particlesApi'
 
 interface ParticleCardProps {
   particle: Particle
-  onAddToCalculation: (particleId: number) => void
+  // УБИРАЕМ onAddToCalculation
 }
 
-const ParticleCard = ({ particle, onAddToCalculation }: ParticleCardProps) => {
+const ParticleCard = ({ particle }: ParticleCardProps) => {
+  // СИНХРОННО вычисляем URL как в старом коде
   const imageUrl = getImageUrl(particle.image)
 
   return (
@@ -57,7 +58,7 @@ const ParticleCard = ({ particle, onAddToCalculation }: ParticleCardProps) => {
         </div>
         
         <div className="mt-auto">
-          <Link to={`/particles/${particle.id}`} className="d-block mb-2 text-decoration-none">
+          <Link to={`/particles/${particle.id}`} className="d-block text-decoration-none">
             <Button 
               variant="dark" 
               className="w-100"
@@ -70,18 +71,7 @@ const ParticleCard = ({ particle, onAddToCalculation }: ParticleCardProps) => {
               Подробнее
             </Button>
           </Link>
-          <Button 
-            variant="success" 
-            className="w-100"
-            style={{ 
-              height: '32px',
-              borderRadius: '4px',
-              fontSize: '14px'
-            }}
-            onClick={() => onAddToCalculation(particle.id)}
-          >
-            Добавить в расчет
-          </Button>
+          {/* УБИРАЕМ кнопку "Добавить в расчет" */}
         </div>
       </Card.Body>
     </Card>

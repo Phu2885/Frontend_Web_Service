@@ -1,3 +1,4 @@
+// src/App.tsx
 import { Routes, Route } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import ParticlesPage from './pages/ParticlesPage'
@@ -10,6 +11,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/particles" element={<ParticlesPage />} />
         <Route path="/particles/:id" element={<ParticleDetailPage />} />
+        <Route path="*" element={<HomePage />} />
       </Routes>
     </div>
   )

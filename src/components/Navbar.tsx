@@ -1,12 +1,13 @@
+// src/components/Navbar.tsx
 import { Navbar, Nav, Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
 const AppNavbar = () => {
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
+    <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
       <Container>
         <Navbar.Brand as={Link} to="/">
-          ПУЗЫРЬКОВАЯ КАМЕРА
+          🧪 ПУЗЫРЬКОВАЯ КАМЕРА
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
